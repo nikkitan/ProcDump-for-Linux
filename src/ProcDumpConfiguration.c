@@ -386,7 +386,7 @@ bool WaitForProcessName(struct ProcDumpConfiguration *self)
 //--------------------------------------------------------------------
 char * GetProcessName(pid_t pid){
 	char procFilePath[32];
-	char fileBuffer[MAX_CMDLINE_LEN];		// maximum command line length on Linux
+	char fileBuffer[MAX_CMDLINE_LEN + 1] = {0};		// maximum command line length on Linux
 	int charactersRead = 0;
 	int	itr = 0;
 	char * stringItr;
@@ -412,10 +412,10 @@ char * GetProcessName(pid_t pid){
 		Log(debug, "Failed to open %s.\n", procFilePath);
 		return NULL;
 	}
-	
+
 	// Extract process name
 	stringItr = fileBuffer;
-	for(int i = 0; i < charactersRead; i++){
+	for(int i = 0; i < charactersRead + 1; i++){
 		if(fileBuffer[i] == '\0'){
 			itr = i - itr;
 			
